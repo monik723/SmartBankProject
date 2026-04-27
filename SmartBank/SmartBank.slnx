@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SmartBank.API/SmartBank.API.csproj" />
+  <Project Path="SmartBank.Core/SmartBank.Core.csproj" />
+  <Project Path="SmartBank.MVC/SmartBank.MVC.csproj" />
+</Solution>
