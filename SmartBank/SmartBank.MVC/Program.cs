@@ -9,7 +9,7 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddHttpClient("API", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:5001/");
+    client.BaseAddress = new Uri("http://localhost:5203/");
 });
 
 var app = builder.Build();
@@ -17,5 +17,9 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
-app.MapDefaultControllerRoute();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
+
 app.Run();
