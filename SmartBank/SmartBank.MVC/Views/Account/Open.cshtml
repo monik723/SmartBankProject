@@ -1,0 +1,37 @@
+@model SmartBank.Core.DTOs.Account.CreateAccountDto
+@{
+    ViewData["Title"] = "Open Account";
+}
+<div class="container mt-4">
+    <h3 class="fw-bold mb-4"><i class="fas fa-plus-circle text-primary me-2"></i>Open New Account</h3>
+    <div class="card border-0 shadow-sm p-4" style="border-radius:12px; max-width:500px;">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+        <form method="post" asp-action="Open" asp-controller="Account">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Account Type</label>
+                <select asp-for="AccountType" class="form-select">
+                    <option value="">-- Select Type --</option>
+                    <option value="Savings">Savings</option>
+                    <option value="Current">Current</option>
+                </select>
+                <span asp-validation-for="AccountType" class="text-danger small"></span>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Initial Deposit (Min Rs.500)</label>
+                <div class="input-group">
+                    <span class="input-group-text">Rs.</span>
+                    <input asp-for="InitialDeposit" type="number" class="form-control" placeholder="500" min="500" />
+                </div>
+                <span asp-validation-for="InitialDeposit" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-check me-2"></i>Open Account
+            </button>
+            <a href="/Account/Index" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+        </form>
+    </div>
+</div>

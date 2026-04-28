@@ -1,0 +1,49 @@
+@model List<SmartBank.Core.DTOs.Account.AccountDto>
+@{
+    ViewData["Title"] = "My Accounts";
+}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold"><i class="fas fa-wallet text-primary me-2"></i>My Accounts</h3>
+        <a href="/Account/Open" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Open New Account
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>@TempData["Success"]</div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="card border-0 shadow-sm p-5 text-center" style="border-radius:12px;">
+            <i class="fas fa-wallet fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No accounts found</h5>
+            <a href="/Account/Open" class="btn btn-primary mt-2">Open Your First Account</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var account in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm p-4" style="border-radius:12px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-primary">@account.AccountType</span>
+                            <span class="badge @(account.Status == "Active" ? "bg-success" : "bg-danger")">
+                                @account.Status
+                            </span>
+                        </div>
+                        <h6 class="text-muted mb-1">Account Number</h6>
+                        <h5 class="fw-bold mb-3">@account.AccountNumber</h5>
+                        <h6 class="text-muted mb-1">Balance</h6>
+                        <h4 class="fw-bold text-success">Rs. @account.Balance.ToString("N2")</h4>
+                        <small class="text-muted mt-2 d-block">Opened: @account.CreatedAt.ToString("dd MMM yyyy")</small>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
