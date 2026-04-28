@@ -23,7 +23,8 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginDto dto)
     {
-        if (!ModelState.IsValid) return View(dto);
+        if (!ModelState.IsValid)
+            return View(dto);
 
         var client = _factory.CreateClient("API");
         var response = await client.PostAsJsonAsync("api/auth/login", dto);
@@ -54,7 +55,8 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
-        if (!ModelState.IsValid) return View(dto);
+        if (!ModelState.IsValid)
+            return View(dto);
 
         var client = _factory.CreateClient("API");
         var response = await client.PostAsJsonAsync("api/auth/register", dto);

@@ -9,6 +9,7 @@ namespace SmartBank.API.Services;
 public class AccountService : IAccountService
 {
     private readonly AppDbContext _db;
+
     public AccountService(AppDbContext db) => _db = db;
 
     public async Task<AccountDto> CreateAccountAsync(int userId, CreateAccountDto dto)
@@ -21,7 +22,7 @@ public class AccountService : IAccountService
             AccountType = dto.AccountType,
             Balance = dto.InitialDeposit,
             UserId = userId,
-            Status = "Active"
+            Status = "Active",
         };
 
         _db.Accounts.Add(account);
@@ -34,14 +35,14 @@ public class AccountService : IAccountService
             AccountType = account.AccountType,
             Balance = account.Balance,
             Status = account.Status,
-            CreatedAt = account.CreatedAt
+            CreatedAt = account.CreatedAt,
         };
     }
 
     public async Task<List<AccountDto>> GetAccountsAsync(int userId)
     {
-        return await _db.Accounts
-            .Where(a => a.UserId == userId)
+        return await _db
+            .Accounts.Where(a => a.UserId == userId)
             .Select(a => new AccountDto
             {
                 Id = a.Id,
@@ -49,7 +50,7 @@ public class AccountService : IAccountService
                 AccountType = a.AccountType,
                 Balance = a.Balance,
                 Status = a.Status,
-                CreatedAt = a.CreatedAt
+                CreatedAt = a.CreatedAt,
             })
             .ToListAsync();
     }

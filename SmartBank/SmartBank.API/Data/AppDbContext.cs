@@ -5,7 +5,8 @@ namespace SmartBank.API.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options) { }
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
@@ -14,12 +15,14 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Role>().HasData(
-            new Role { Id = 1, Name = "Admin" },
-            new Role { Id = 2, Name = "Customer" },
-            new Role { Id = 3, Name = "Teller" },
-            new Role { Id = 4, Name = "Manager" },
-            new Role { Id = 5, Name = "Auditor" }
-        );
+        builder
+            .Entity<Role>()
+            .HasData(
+                new Role { Id = 1, Name = "Admin" },
+                new Role { Id = 2, Name = "Customer" },
+                new Role { Id = 3, Name = "Teller" },
+                new Role { Id = 4, Name = "Manager" },
+                new Role { Id = 5, Name = "Auditor" }
+            );
     }
 }

@@ -1,12 +1,13 @@
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using SmartBank.Core.DTOs.Account;
-using System.Net.Http.Headers;
 
 namespace SmartBank.MVC.Controllers;
 
 public class AccountController : Controller
 {
     private readonly IHttpClientFactory _factory;
+
     public AccountController(IHttpClientFactory factory) => _factory = factory;
 
     private HttpClient GetClient()
@@ -14,8 +15,10 @@ public class AccountController : Controller
         var client = _factory.CreateClient("API");
         var token = HttpContext.Session.GetString("Token");
         if (token != null)
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Bearer",
+                token
+            );
         return client;
     }
 
@@ -41,7 +44,8 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Open(CreateAccountDto dto)
     {
-        if (!ModelState.IsValid) return View(dto);
+        if (!ModelState.IsValid)
+            return View(dto);
 
         var client = GetClient();
         var response = await client.PostAsJsonAsync("api/accounts/create", dto);

@@ -1,12 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SmartBank.API.Data;
 using SmartBank.Core.DTOs.Auth;
 using SmartBank.Core.Interfaces;
 using SmartBank.Core.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace SmartBank.API.Services;
 
@@ -32,7 +32,7 @@ public class AuthService : IAuthService
             Email = dto.Email,
             Mobile = dto.Mobile,
             RoleId = dto.RoleId,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
         };
 
         _db.Users.Add(user);
@@ -44,8 +44,8 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
     {
-        var user = await _db.Users
-            .Include(u => u.Role)
+        var user = await _db
+            .Users.Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
@@ -61,11 +61,10 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, user.FullName),
-            new Claim(ClaimTypes.Role, role)
+            new Claim(ClaimTypes.Role, role),
         };
 
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
 
         var token = new JwtSecurityToken(
             issuer: _config["Jwt:Issuer"],
@@ -80,7 +79,7 @@ public class AuthService : IAuthService
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             FullName = user.FullName,
             Email = user.Email,
-            Role = role
+            Role = role,
         };
     }
 }
